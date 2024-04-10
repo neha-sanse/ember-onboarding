@@ -37,4 +37,24 @@ describe("Acceptance | super rentals", function () {
     await click(".jumbo a.button");
     expect(currentURL()).to.equal("/about-us");
   });
+
+  it("navigating using the nav-bar", async function () {
+    await visit("/");
+
+    expect(find("nav")).to.exist;
+    expect(find("nav a.menu-index").textContent.trim()).to.equal(
+      "SuperRentals"
+    );
+    expect(find("nav a.menu-about").textContent.trim()).to.equal("About");
+    expect(find("nav a.menu-contact").textContent.trim()).to.equal("Contact");
+
+    await click("nav a.menu-about");
+    expect(currentURL()).to.equal("/about-us");
+
+    await click("nav a.menu-contact");
+    expect(currentURL()).to.equal("/meet-us");
+
+    await click("nav a.menu-index");
+    expect(currentURL()).to.equal("/");
+  });
 });
