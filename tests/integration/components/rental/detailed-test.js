@@ -4,12 +4,12 @@ import { setupRenderingTest } from "ember-mocha";
 import { render, find } from "@ember/test-helpers";
 import { hbs } from "ember-cli-htmlbars";
 
-describe("Integration | Component | rental", function () {
+describe("Integration | Component | rental/detailed", async function () {
   setupRenderingTest();
-
-  it("renders Rental with images and map", async function () {
+  this.beforeEach(function () {
     this.setProperties({
       rental: {
+        id: "grand-old-mansion",
         title: "Grand Old Mansion",
         owner: "Veruca Salt",
         city: "San Francisco",
@@ -26,16 +26,16 @@ describe("Integration | Component | rental", function () {
           "This grand old mansion sits on over 100 acres of rolling hills and dense redwood forests.",
       },
     });
+  });
+  await render(hbs`<Rental::Detailed />`);
+  it("it renders a header with a share button", async function () {
+    await render(hbs`<Rental::Detailed @rental={{this.rental}} />`);
 
-    await render(hbs`<Rental @rental={{this.rental}} />`);
-
-    expect(find("article")).to.have.class("rental");
-    expect(find("article h3")).trimmed.to.have.text("Grand Old Mansion");
-    expect(find("article .detail.owner")).to.contain.text("Veruca Salt");
-    expect(find("article .detail.type")).to.contain.text("Standalone");
-    expect(find("article .detail.location")).to.contain.text("San Francisco");
-    expect(find("article .detail.bedrooms")).to.contain.text("15");
-    expect(find("article .image")).exist;
-    expect(find("article .map")).exist;
+    expect(find(".jumbo")).exists();
+    expect(find(".jumbo h2")).contains("Grand Old Mansion");
+    expect(find(".jumbo p")).contains(
+      "a nice place to stay near San Francisco"
+    );
+    expect(find(".jumbo a.button")).contains("Share on Twitter");
   });
 });
